@@ -1,6 +1,6 @@
 # Care for Your Own - Personal Assistant
 
-This personal assistant application helps you with daily tasks, scheduling, and information access using natural language. It understands your requests and provides personalized responses.
+Care for Your Own is a personal assistant application designed specifically for Afrikaans, English, and Zulu users.  It features cutting-edge speech synthesis and leverages Gemini's remarkable storytelling abilities to captivate children with age-appropriate, relevant, accurate, and educational narratives.  Gemini's performance in this area is unparalleled, setting it apart from other LLMs.
 
 ## Getting Started
 
@@ -79,5 +79,10 @@ If you still have problems, you can create an "Issue" on GitHub (go to the "Issu
 
 ## Contact
 
-ysterjobeer@gmail.com
+ysterjobeer@gmail.com 
+
+---
+
+Other languages: [Afrikaans](README_af.md)
+
  
