@@ -6,13 +6,19 @@ This personal assistant application helps you with daily tasks, scheduling, and 
 
 Here's how to download and use the "Care for Your Own" personal assistant:
 
-1.  **Download the application:**
+1.  **Go to the correct branch:**
 
-    *   **Easiest way (if available):** Go to the "Releases" page on GitHub ([https://github.com/Jobeer1/Care-for-your-own/releases](https://github.com/Jobeer1/Care-for-your-own/releases)).  If there's a pre-built version (like an `.exe` file), download it. This is the simplest option.
+    *   When you visit the GitHub repository ([https://github.com/Jobeer1/Care-for-your-own](https://github.com/Jobeer1/Care-for-your-own)), you might land on the `main` branch.  For downloads, you'll want the `master` branch.
 
-    *   **If no pre-built version:** If there are no releases, you'll need to download the code directly. Click the green "Code" button on the main repository page ([https://github.com/Jobeer1/Care-for-your-own](https://github.com/Jobeer1/Care-for-your-own)). Then, click "Download ZIP".
+    *   Click on the branch dropdown menu (it usually says "main" or "master") and select the `master` branch.
 
-2.  **Install (if you downloaded the code):**
+2.  **Download the application:**
+
+    *   **Easiest way (if available):** Go to the "Releases" page on GitHub ([https://github.com/Jobeer1/Care-for-your-own/releases](https://github.com/Jobeer1/Care-for-your-own/releases)).  If there's a pre-built version (like an `.exe` file) for the `master` branch, download it. This is the simplest option.
+
+    *   **If no pre-built version:** If there are no releases or you need the latest code, click the green "Code" button on the main repository page (make sure you are on the `master` branch). Then, click "Download ZIP".
+
+3.  **Install (if you downloaded the code):**
 
     *   If you downloaded a pre-built version, you can skip this step.
 
@@ -28,7 +34,7 @@ Here's how to download and use the "Care for Your Own" personal assistant:
 
     *   Type `pip install -r requirements.txt` and press Enter. This will install all the necessary components. If you don't have `requirements.txt` file, type the following instead: `pip install flask azure-cognitiveservices-speech google-generativeai python-dotenv`
 
-3.  **Get API Keys (Important!):**
+4.  **Get API Keys (Important!):**
 
     This application uses API keys to work.  You'll need to get your own keys from the following services:
 
@@ -36,7 +42,7 @@ Here's how to download and use the "Care for Your Own" personal assistant:
 
     *   **Azure Cognitive Services API Keys:** You'll need to create an Azure account and subscribe to the Azure Cognitive Services for Speech. You can find instructions on how to do this in the Azure documentation.
 
-4.  **Configuration (Setting up the keys):**
+5.  **Configuration (Setting up the keys):**
 
     *   Find the file named `config.ini.example` in the application folder.
 
@@ -48,13 +54,13 @@ Here's how to download and use the "Care for Your Own" personal assistant:
 
     *   Save the `config.ini` file.
 
-5.  **Run the application:**
+6.  **Run the application:**
 
     *   **If you downloaded a pre-built version:** Double-click the `.exe` file to run the application.
 
     *   **If you downloaded the code:** Open the command prompt or terminal, go to the application folder, and type `python app.py` and press Enter.
 
-6.  **Using the application:**
+7.  **Using the application:**
 
     Describe how to use your application.  For example:
 
@@ -73,4 +79,5 @@ If you still have problems, you can create an "Issue" on GitHub (go to the "Issu
 
 ## Contact
 
-ysterjobeer@gmail.com 
+ysterjobeer@gmail.com
+ 
