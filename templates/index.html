@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Personal Assistant</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f9;
+            color: #333;
+            transition: background-color 0.3s ease;
+        }
+
+        body.dark-mode {
+            background-color: #1e1e1e;
+            color: #f4f4f9;
+        }
+
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease;
+        }
+
+        body.dark-mode .container {
+            background: #2c3e50;
+            color: #f4f4f9;
+        }
+
+        /* Conversation Display */
+        #conversation {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 20px;
+            height: 300px;
+            overflow-y: auto;
+            background-color: #fafafa;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+        }
+
+        body.dark-mode #conversation {
+            background-color: #34495e;
+            border-color: #444;
+        }
+
+        .message {
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 8px;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .user-message {
+            background-color: #e3f2fd;
+            margin-left: 20%;
+            text-align: right;
+        }
+
+        body.dark-mode .user-message {
+            background-color: #1c3f60;
+        }
+
+        .bot-message {
+            background-color: #f5f5f5;
+            margin-right: 20%;
+        }
+
+        body.dark-mode .bot-message {
+            background-color: #3b536b;
+        }
+
+        .message button {
+            margin-left: 10px;
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .message button:hover {
+            background: #0056b3;
+        }
+
+        /* Input Area */
+        #input-area {
+            margin-bottom: 20px;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            resize: vertical;
+            min-height: 100px;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        body.dark-mode textarea {
+            background-color: #34495e;
+            border-color: #444;
+            color: #f4f4f9;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        /* Voice Customization */
+        .voice-customization {
+            margin-bottom: 20px;
+        }
+
+        .voice-customization label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .voice-customization input[type="range"] {
+            width: 100%;
+        }
+
+        .voice-customization span {
+            display: inline-block;
+            margin-left: 10px;
+            font-size: 14px;
+            color: #555;
+        }
+
+        /* Tone Adjustment */
+        #tone-adjustment {
+            margin-bottom: 20px;
+        }
+
+        #tone-adjusted-message {
+            margin-top: 10px;
+            padding: 10px;
+            background: #f1f1f1;
+            border-radius: 8px;
+        }
+
+        /* Voice Selection */
+        #voice-selection {
+            margin-bottom: 20px;
+        }
+
+        select {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        /* Analysis Section */
+        #analysis, #conversation-analysis {
+            margin-bottom: 20px;
+        }
+
+        #recommendations, #conversation-analysis-result {
+            margin-top: 10px;
+            padding: 10px;
+            background: #f1f1f1;
+            border-radius: 8px;
+        }
+
+        /* Loading Indicator */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #007bff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Dark Mode Toggle */
+        .dark-mode-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .dark-mode-toggle:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>AI Personal Assistant</h1>
+
+        <!-- Dark Mode Toggle -->
+        <button class="dark-mode-toggle" onclick="toggleDarkMode()">
+            <i class="fas fa-moon"></i>
+        </button>
+
+        <!-- Conversation Display -->
+        <div id="conversation"></div>
+
+        <!-- Input Area -->
+        <div id="input-area">
+            <label for="user-input">Enter your message:</label><br>
+            <textarea id="user-input" placeholder="Type your message here..."></textarea><br>
+            <button id="send-button">Send</button>
+            <button id="clear-button">Clear Conversation</button>
+        </div>
+
+        <!-- Voice Customization -->
+        <div class="voice-customization">
+            <h2>Voice Customization</h2>
+            <div>
+                <label for="pitch">Pitch:</label>
+                <input type="range" id="pitch" min="-50%" max="50%" value="0%" step="10%">
+                <span id="pitch-value">0%</span>
+            </div>
+            <div>
+                <label for="rate">Rate:</label>
+                <input type="range" id="rate" min="0.5" max="2.0" value="1.0" step="0.1">
+                <span id="rate-value">1.0</span>
+            </div>
+            <button id="preview-voice-button">Preview Voice</button>
+        </div>
+
+        <!-- Tone Adjustment -->
+        <div id="tone-adjustment">
+            <label for="tone">Select tone:</label>
+            <select id="tone">
+                <option value="professional">Professional</option>
+                <option value="friendly">Friendly</option>
+                <option value="casual">Casual</option>
+            </select>
+            <button id="adjust-tone-button">Adjust Tone</button>
+            <div id="tone-adjusted-message"></div>
+        </div>
+
+        <!-- Voice Selection -->
+        <div id="voice-selection">
+            <label for="voice">Select voice:</label>
+            <select id="voice">
+                <option value="zu-ZA-ThandoNeural">Zulu - Thando</option>
+                <option value="af-ZA-AdriNeural">Afrikaans - Adri</option>
+                <option value="en-GB-RyanNeural">British English - Ryan</option>
+                <option value="en-US-JennyNeural">US English - Jenny</option>
+                <option value="en-AU-NatashaNeural">Australian English - Natasha</option>
+            </select>
+        </div>
+
+        <!-- Analysis Section -->
+        <div id="analysis">
+            <h2>Analysis</h2>
+            <button id="analyze-button">Analyze Conversation</button>
+            <div id="recommendations"></div>
+        </div>
+
+        <!-- Conversation Analysis -->
+        <div id="conversation-analysis">
+            <h2>Conversation Analysis</h2>
+            <label for="analysis-input">Paste email or conversation:</label><br>
+            <textarea id="analysis-input" rows="8" placeholder="Paste your conversation here..."></textarea><br>
+            <button id="analyze-conversation-button">Analyze</button>
+            <div id="conversation-analysis-result"></div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            let conversationHistory = []; // Keep track of conversation locally
+
+            // Dark Mode Toggle
+            function toggleDarkMode() {
+                $('body').toggleClass('dark-mode');
+                const isDarkMode = $('body').hasClass('dark-mode');
+                localStorage.setItem('darkMode', isDarkMode);
+                $('.dark-mode-toggle i').toggleClass('fa-moon fa-sun');
+            }
+
+            // Load Dark Mode Preference
+            if (localStorage.getItem('darkMode') === 'true') {
+                toggleDarkMode();
+            }
+
+            // Send message
+            $('#send-button').click(function() {
+                const userInput = $('#user-input').val().trim();
+                if (!userInput) return;
+
+                $('#send-button').html('Sending... <div class="loading"></div>');
+                $.ajax({
+                    type: 'POST',
+                    url: '/generate',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ input: userInput }),
+                    success: function(data) {
+                        conversationHistory.push({ type: "User", text: userInput });
+                        conversationHistory.push({ type: "Bot", text: data.response });
+                        updateConversationDisplay();
+                        $('#user-input').val('');
+                        $('#send-button').html('Send');
+                    },
+                    error: function() {
+                        alert('Failed to send message. Please try again.');
+                        $('#send-button').html('Send');
+                    }
+                });
+            });
+
+            // Clear conversation
+            $('#clear-button').click(function() {
+                conversationHistory = [];
+                updateConversationDisplay();
+            });
+
+            // Preview voice settings
+            $('#preview-voice-button').click(function() {
+                const text = "This is a preview of the current voice settings.";
+                const selectedVoiceName = $('#voice').val();
+                const pitch = $('#pitch').val() + "%";
+                const rate = $('#rate').val();
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/synthesize',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ text: text, voice_name: selectedVoiceName, pitch: pitch, rate: rate }),
+                    success: function(data) {
+                        const audioElement = new Audio('/audio/' + data.audio_file);
+                        audioElement.play().catch(error => {
+                            console.error('Failed to play audio:', error);
+                            alert('Failed to play audio. Please check the console for details.');
+                        });
+                    },
+                    error: function(error) {
+                        console.error('Speech synthesis failed:', error);
+                        if (error.responseJSON && error.responseJSON.error) {
+                            alert("Speech synthesis failed: " + error.responseJSON.error);
+                        } else {
+                            alert("Speech synthesis failed. Please try again.");
+                        }
+                    }
+                });
+            });
+
+            // Update conversation display
+            function updateConversationDisplay() {
+                let conversationHtml = "";
+                conversationHistory.forEach((item, index) => {
+                    const messageClass = item.type === "User" ? "user-message" : "bot-message";
+                    conversationHtml += `
+                        <div class="message ${messageClass}">
+                            ${item.text}
+                            <button onclick="playTextToSpeech(${index})">Listen</button>
+                        </div>`;
+                });
+                $('#conversation').html(conversationHtml);
+                $('#conversation').scrollTop($('#conversation')[0].scrollHeight); // Auto-scroll
+            }
+
+            // Play text-to-speech
+            window.playTextToSpeech = function(index) {
+                const text = conversationHistory[index].text;
+                const selectedVoiceName = $('#voice').val();
+                const pitch = $('#pitch').val() + "%";
+                const rate = $('#rate').val();
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/synthesize',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ text: text, voice_name: selectedVoiceName, pitch: pitch, rate: rate }),
+                    success: function(data) {
+                        const audioElement = new Audio('/audio/' + data.audio_file);
+                        audioElement.play().catch(error => {
+                            console.error('Failed to play audio:', error);
+                            alert('Failed to play audio. Please check the console for details.');
+                        });
+                    },
+                    error: function(error) {
+                        console.error('Speech synthesis failed:', error);
+                        if (error.responseJSON && error.responseJSON.error) {
+                            alert("Speech synthesis failed: " + error.responseJSON.error);
+                        } else {
+                            alert("Speech synthesis failed. Please try again.");
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
